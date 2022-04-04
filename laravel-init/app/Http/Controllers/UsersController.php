@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -48,8 +47,8 @@ class UsersController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
 
-        if (Auth::user()->is_admin){
-            $input = $request->only(['name', 'email','is_admin']);
+        if (Auth::user()->is_admin) {
+            $input = $request->only(['name', 'email', 'is_admin']);
         } else {
             $input = $request->only(['name', 'email']);
         }

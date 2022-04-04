@@ -14,8 +14,10 @@
             </div>
             @if(Auth::user())
                 <div class="bottom d-flex align-items-center justify-content-between">
+                    @if(Auth::user()->is_admin || Auth::user() == $user)
                     <a href="{{route('users.edit', $user)}}" class="btn btn-warning my-1">Modifier l'utilisateur</a>
-                    @if(Auth::user()->is_admin)
+
+                        @if(Auth::user()->is_admin || Auth::user() == $user)
                         <div class="delete">
                             <form action="{{route('users.destroy', $user)}}" method="POST">
                                 @csrf
@@ -24,6 +26,7 @@
                                        class="btn btn-danger">
                             </form>
                         </div>
+                        @endif
                     @endif
                 </div>
             @endif

@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -27,7 +26,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'email' => ['required', 'email', 'max:255',  Rule::unique('users')->ignore($this->route('user'))],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($this->route('user'))],
         ];
     }
 }
