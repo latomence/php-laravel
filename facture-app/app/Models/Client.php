@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Client extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,17 +18,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'github_id',
         'name',
         'email',
-        'address',
         'phone',
-        'iban',
-        'rib',
-        'bic',
-        'account_holder',
-        'domiciliation',
-        'mentions',
+        'address',
+        'ref',
+        'siret',
     ];
 
     /**
@@ -37,8 +32,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'created_at',
-        'updated_at',
+        //
     ];
 
     /**

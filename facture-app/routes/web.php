@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\GitHubController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\UserDetailController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,40 +18,25 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return view('welcome'); })->name('index');
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
+Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+
+Route::get('/login', [GitHubController::class, 'login'])->name('auth.login');
+
+Route::get('/register', [GitHubController::class, 'register'])->name('auth.register');
+Route::put('/register', [GitHubController::class, 'registration'])->name('auth.registration');
+
+Route::get('/logout', function () { Auth::logout(); return redirect( route('index')); })->name('logout');
 
 
-Route::get('auth/', [GitHubController::class, 'gitRedirect']);
+
+Route::get('/auth', [GitHubController::class, 'gitRedirect'])->name('auth.redirect');
 Route::get('auth/callback', [GitHubController::class, 'gitCallback']);
+Route::resource('users', GitHubController::class);
+Route::resource('clients', ClientController::class);
 
 
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('github')
-        ->scopes(['read:user', 'public_repo'])
-        ->redirect('to');
-});
 
-Route::get('/aut/callback', function () {
-    $githubUser = Socialite::driver('github')->user();
-
-    $user = User::updateOrCreate([
-        'github_id' => $githubUser->id,
-    ], [
-        'name' => $githubUser->name,
-        'email' => $githubUser->email,
-        'github_token' => $githubUser->token,
-        'github_refresh_token' => $githubUser->refreshToken,
-    ]);
-
-    Auth::login($user);
-
-    return redirect('/');
-});
 
 
