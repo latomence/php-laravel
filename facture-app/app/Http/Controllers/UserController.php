@@ -34,7 +34,7 @@ class UserController extends Controller
             'mentions',
         ]);
         Auth::user()->update($input);
-        return redirect(route('user.show'));
+        return redirect(route('index'));
     }
 
     public function delete()

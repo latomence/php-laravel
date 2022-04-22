@@ -51,6 +51,8 @@ class GitHubController extends Controller
             'bic',
             'account_holder',
             'domiciliation',
+            'siret',
+            'ape',
             'mentions']);
         Auth::user()->update($input);
         return redirect()->route('dashboard');

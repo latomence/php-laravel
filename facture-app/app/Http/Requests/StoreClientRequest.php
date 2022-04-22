@@ -26,7 +26,7 @@ class StoreClientRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('clients')],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'max:255'],
             'address' => ['required', 'max:255'],
             'ref' => ['required', 'max:255'],

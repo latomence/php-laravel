@@ -24,6 +24,7 @@ class Client extends Authenticatable
         'address',
         'ref',
         'siret',
+        'user_id'
     ];
 
     /**
@@ -32,7 +33,8 @@ class Client extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        //
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -43,4 +45,14 @@ class Client extends Authenticatable
     protected $casts = [
         //
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function missions()
+    {
+        return $this->hasMany(Mission::class);
+    }
 }

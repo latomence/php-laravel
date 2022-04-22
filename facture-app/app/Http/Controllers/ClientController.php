@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClientRequest;
 use App\Models\Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
 
-    public function index(Client $client)
+    public function index()
     {
-        return view('clients.index', ['client' => Client::all()]);
+        $clients = Auth::user()->clients;
+
+        return view('clients.index', ['client' => $clients]);
     }
 
 
@@ -23,16 +26,10 @@ class ClientController extends Controller
 
     public function store(StoreClientRequest $request)
     {
-        $input = $request->only(['name', 'email', 'password']);
-        $client = Client::create($input);
+        $input = $request->safe()->only(['name', 'email', 'phone', 'address', 'ref', 'siret']);
+        $client = Auth::user()->clients()->create($input);
 
-        return redirect()->route('clients.index');
-    }
-
-
-    public function show(Client $client)
-    {
-        return view('users.show', ['client' => $client]);
+        return redirect()->route(('clients.index') . "#" . $client->id);
     }
 
 
@@ -42,19 +39,28 @@ class ClientController extends Controller
     }
 
 
-    public function update(UpdateClientRequest $request, Client $client)
+    public function update(StoreClientRequest $request, Client $client)
     {
-        $input = $request->only(['name', 'email']);
+        $input = $request->only(['name', 'email', 'phone', 'address', 'ref', 'siret']);
         $client->update($input);
 
-        return redirect()->route('clients.show', $user);
+        return redirect()->route(('clients.index') . "#" . $client->id);
     }
 
 
     public function destroy(Client $client)
     {
-        $client->delete();
-
-        return redirect()->route('clients.index');
+        if (Auth::user() == $client->user)
+        {
+            $client->delete();
+            foreach ($client->missions as $mission) {
+                $mission->delete();
+                foreach ($mission->taches as $tache) {
+                    $tache->delete();
+                }
+            }
+            return redirect()->route(('clients.index') . "#" . $client->id);
+        }
+        return redirect()->route(('clients.index') . "#" . $client->id);
     }
 }
